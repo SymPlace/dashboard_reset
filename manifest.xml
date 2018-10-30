@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Dashboard Reset</name>
+	<id>dashboard_reset</id>
+	<author>oseg</author>
+	<version>1.0.0</version>
+ 	<category>widget</category>
+	<description>A dashboard reset ability for users and admins</description>
+	<license>GNU General Public License version 2</license>
+	<requires>
+		<type>elgg_release</type>
+		<version>2.3</version>
+	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>dashboard</name>
+		<version>1.9</version>
+	</requires>
+	<suggests>
+		<type>plugin</type>
+		<name>widget_manager</name>
+		<version>8.3</version>
+	</suggests>
+</plugin_manifest>
