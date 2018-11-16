@@ -1,6 +1,10 @@
 Version history
 ===============
 
+1.0.1 (2018-11-16):
+
+- fix duplicated user profile widgets issue
+
 1.0.0 (2018-10-30):
 
 - initial version 

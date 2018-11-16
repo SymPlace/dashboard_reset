@@ -47,10 +47,55 @@ function dashboard_reset_widgets($owner_guid, $context) {
 	}
     }
 
-    // Create default user dashboard widgets by simulating a user account creation
-    if (!function_exists('_elgg_create_default_widgets')) {
-	elgg_log('Internal core function "_elgg_create_default_widgets" does not exist any more !', 'ERROR');
-	return false;
-    }
-    _elgg_create_default_widgets('create', 'user', get_entity($owner_guid));
+    // Create default user dashboard widgets
+    dashboard_reset_create_default_widgets($owner_guid, $context);
+}
+
+/**
+ * Creates entity default widgets
+ * 
+ * modified code from core function: _elgg_create_default_widgets
+ *
+ * @param  $entity_guid
+ * @param  $widget_context
+ * @return void
+ * @access private
+ */
+function dashboard_reset_create_default_widgets($entity_guid, $widget_context) {
+	// need to be able to access everything
+	$old_ia = elgg_set_ignore_access(true);
+	elgg_push_context('create_default_widgets');
+
+	// pull in by widget context with widget owners as the site
+	// not using elgg_get_widgets() because it sorts by columns and we don't care right now.
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'widget',
+		'owner_guid' => elgg_get_site_entity()->guid,
+		'private_setting_name' => 'context',
+		'private_setting_value' => $widget_context,
+		'limit' => 0
+	);
+
+	$widgets = elgg_get_entities_from_private_settings($options);
+	/* @var \ElggWidget[] $widgets */
+
+	foreach ($widgets as $widget) {
+		// change the container and owner
+		$new_widget = clone $widget;
+		$new_widget->container_guid = $entity_guid;
+		$new_widget->owner_guid = $entity_guid;
+
+		// pull in settings
+		$settings = get_all_private_settings($widget->guid);
+
+		foreach ($settings as $name => $value) {
+			$new_widget->$name = $value;
+		}
+
+		$new_widget->save();
+	}
+
+	elgg_set_ignore_access($old_ia);
+	elgg_pop_context();
 }

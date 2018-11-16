@@ -3,7 +3,7 @@
 	<name>Dashboard Reset</name>
 	<id>dashboard_reset</id>
 	<author>oseg</author>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
  	<category>widget</category>
 	<description>A dashboard reset ability for users and admins</description>
 	<license>GNU General Public License version 2</license>
