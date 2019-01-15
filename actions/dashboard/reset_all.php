@@ -47,6 +47,22 @@ $users = $site->getEntities([
 //Loop on users
 $count = 0;
 foreach ($users as $user) {
+    // Update widget manager fixed widgets
+    if (elgg_is_active_plugin('widget_manager') && function_exists('widget_manager_update_fixed_widgets')) {
+	$fixed_ts = elgg_get_plugin_setting($context . '_fixed_ts', 'widget_manager');
+	if (empty($fixed_ts)) {
+		// there should always be a fixed ts, so fix it now. This situation only occurs after activating widget_manager the first time.
+		$fixed_ts = time();
+		elgg_set_plugin_setting($context . '_fixed_ts', $fixed_ts, 'widget_manager');
+	}
+
+	// get the ts of the profile/dashboard you are viewing
+	$user_fixed_ts = elgg_get_plugin_user_setting($context . '_fixed_ts', $user->getGUID(), 'widget_manager');
+	if ($user_fixed_ts < $fixed_ts) {
+		widget_manager_update_fixed_widgets($context, $user->getGUID());
+	}
+    }
+
     if (dashboard_reset_widgets($user->getGUID(), $context) === false) {
 	register_error(elgg_echo('dashboard_reset:all:failure'));
 	forward(REFERER);

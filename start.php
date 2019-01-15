@@ -24,7 +24,7 @@ LEFT JOIN elgg_entity_subtypes es ON es.id = e.subtype
 LEFT JOIN elgg_private_settings ps ON ps.entity_guid = e.guid AND ps.name = 'context' AND ps.value = 'dashboard'
 WHERE e.type = 'object' AND es.subtype = 'widget' AND e.owner_guid != 1 AND ps.id IS NOT NULL
  */
-function dashboard_reset_widgets($owner_guid, $context) {
+function dashboard_reset_widgets($owner_guid, $context) {    
     // Request user dashboard widgets
     $options = array(
 	    'type' => 'object',
@@ -40,7 +40,9 @@ function dashboard_reset_widgets($owner_guid, $context) {
     foreach ($widgets as $widget) {
 	$layout_owner_guid = $widget->getContainerGUID();
 	elgg_set_page_owner_guid($layout_owner_guid);
-	if (!elgg_can_edit_widget_layout($widget->context) || !$widget->delete()) {
+	if ((isset($widget->fixed)) && ($widget->fixed == true)) {
+	    continue; // do not delete fixed widget (already managed by widget manager)
+	} else if (!elgg_can_edit_widget_layout($context) || !$widget->delete()) {
 	    $current_user_guid = elgg_get_logged_in_user_guid();
 	    elgg_log("Current user (guid:'{$current_user_guid}') does not have the right to edit current widget (guid:'{$widget->getGUID()}') layout ('{$widget->context}') !", 'ERROR');
 	    return false;
@@ -81,6 +83,10 @@ function dashboard_reset_create_default_widgets($entity_guid, $widget_context) {
 	/* @var \ElggWidget[] $widgets */
 
 	foreach ($widgets as $widget) {
+	    	if ((isset($widget->fixed)) && ($widget->fixed == true)) {
+			continue; // do not clone fixed widget (already managed by widget manager)
+		}
+		
 		// change the container and owner
 		$new_widget = clone $widget;
 		$new_widget->container_guid = $entity_guid;

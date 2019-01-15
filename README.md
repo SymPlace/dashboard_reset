@@ -1,11 +1,11 @@
 Dashboard Reset plugin for Elgg 2.3
 ===================================
 
-Latest Version: 1.0.1  
-Released: 2018-11-16  
+Latest Version: 1.0.2  
+Released: 2019-01-15  
 Contact: olivier.seguin@applisite.fr  
 License: GNU General Public License version 2  
-Copyright: (C) Arttic 2018  
+Copyright: (C) Arttic 2018-2019  
 
 
 Description

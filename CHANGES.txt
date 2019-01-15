@@ -1,6 +1,10 @@
 Version history
 ===============
 
+1.0.2 (2019-01-15):
+
+- fix: take into account fixed widgets (widget manager)
+
 1.0.1 (2018-11-16):
 
 - fix duplicated user profile widgets issue
