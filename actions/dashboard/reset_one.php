@@ -23,6 +23,8 @@ if (!$owner_entity || !elgg_instanceof($owner_entity, 'user') || ($context != 'd
     forward(REFERER);
 }
 
+elgg_log("Reset '".elgg_get_logged_in_user_entity()->name."'dashboard:", 'NOTICE');
+
 if (dashboard_reset_widgets($owner_guid, $context) === false) {
     register_error(elgg_echo('dashboard_reset:one:failure'));
     forward(REFERER);
